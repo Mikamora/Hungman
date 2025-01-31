@@ -1,7 +1,7 @@
 import Gallows from "../../components/Gallows/Gallows";
 import Stickman from "../../components/Stickman/Stickman";
+import Keyboard from "../../components/Keyboard/Keyboard";
 import { StickmanWrapper } from "./styles";
-// import Keyboard from "../../components/Keyboard/Keyboard";
 
 const Game = () => {
   return (
@@ -10,7 +10,7 @@ const Game = () => {
         <Stickman />
         <Gallows />
       </StickmanWrapper >
-      {/*<Keyboard />*/}
+      <Keyboard />
     </div>
   )
 };
