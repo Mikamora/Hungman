@@ -1,40 +1,40 @@
-import { Wrapper, TopRow, MiddleRow, BottomRow, LetterButton } from "./styles";
+import { Wrapper, TopRow, MiddleRow, BottomRow } from "./styles";
+import LetterButton, { IsCorrectTypes } from "./LetterButton/LetterButton";
 
-const Keyboard = ({}) => {
+interface KeyboardProps {
+  hangmanWord?: string;
+}
+
+const TRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
+const MRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
+const BRow = ["Z", "X", "C", "V", "B", "N", "M"];
+
+const Keyboard = ({hangmanWord = "Hello"}: KeyboardProps) => {
+
+  const handleClick = (letter: string) => {
+    if(hangmanWord?.toLowerCase().includes(letter.toLowerCase())) {
+      return IsCorrectTypes.CORRECT;
+    }
+    return IsCorrectTypes.INCORRECT;
+  }
+
   return (
-    <Wrapper> 
-        <TopRow>
-            <LetterButton>Q</LetterButton>
-            <LetterButton>W</LetterButton>
-            <LetterButton>E</LetterButton>
-            <LetterButton>R</LetterButton>
-            <LetterButton>T</LetterButton>
-            <LetterButton>Y</LetterButton>
-            <LetterButton>U</LetterButton>
-            <LetterButton>I</LetterButton>
-            <LetterButton>O</LetterButton>
-            <LetterButton>P</LetterButton>
-        </TopRow>
-        <MiddleRow>
-            <LetterButton>A</LetterButton>
-            <LetterButton>S</LetterButton>
-            <LetterButton>D</LetterButton>
-            <LetterButton>F</LetterButton>
-            <LetterButton>G</LetterButton>
-            <LetterButton>H</LetterButton>
-            <LetterButton>J</LetterButton>
-            <LetterButton>K</LetterButton>
-            <LetterButton>L</LetterButton>
-        </MiddleRow>
-        <BottomRow>
-            <LetterButton>Z</LetterButton>
-            <LetterButton>X</LetterButton>
-            <LetterButton>C</LetterButton>
-            <LetterButton>V</LetterButton>
-            <LetterButton>B</LetterButton>
-            <LetterButton>N</LetterButton>
-            <LetterButton>M</LetterButton>
-        </BottomRow>
+    <Wrapper>
+      <TopRow>
+        {TRow.map((letter) => (
+         <LetterButton letter={letter} onClick={handleClick}/>
+        ))}
+      </TopRow>
+      <MiddleRow>
+        {MRow.map((letter) => (
+         <LetterButton letter={letter} onClick={handleClick}/>
+        ))}
+      </MiddleRow>
+      <BottomRow>
+      {BRow.map((letter) => (
+         <LetterButton letter={letter} onClick={handleClick}/>
+        ))}
+      </BottomRow>
     </Wrapper>
   )
 };
