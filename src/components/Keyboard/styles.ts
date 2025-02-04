@@ -37,21 +37,4 @@ const BottomRow = styled.div`
     height: 90px;
 `;
 
-const LetterButton = styled.button`
-    font-family: "Inter", serif;
-    height: 90px;
-    width: 90px;
-    background-color: #D9D9D9;
-    color: #000000;
-    font-weight: 800;
-    font-size: 32px;
-    border-radius: 15px;
-    border: 0;
-    &:hover {
-        cursor: pointer;
-        background-color: grey;
-        color: #ffffff;
-    }
-`;
-
-export { Wrapper, TopRow, MiddleRow, BottomRow, LetterButton };
+export { Wrapper, TopRow, MiddleRow, BottomRow };
