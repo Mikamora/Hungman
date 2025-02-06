@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/cat.webp';
 import { Wrapper, BananaCatImg, Title, Info, FlavorText, StartMenu, HomeButtons } from './styles';
 
 const Home = () => {
+  const navigate = useNavigate();
   const date = new Date().toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
   return (
@@ -15,7 +17,7 @@ const Home = () => {
         </FlavorText>
       </Info>
       <StartMenu>
-        <HomeButtons>Play</HomeButtons>
+        <HomeButtons onClick={() => navigate("/game")}>Play</HomeButtons>
         <HomeButtons>Settings</HomeButtons>
       </StartMenu>
       <FlavorText>{date}</FlavorText>

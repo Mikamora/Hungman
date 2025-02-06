@@ -2,37 +2,30 @@ import { Wrapper, TopRow, MiddleRow, BottomRow } from "./styles";
 import LetterButton, { IsCorrectTypes } from "./LetterButton/LetterButton";
 
 interface KeyboardProps {
-  hangmanWord?: string;
+  onKeyClick: (letter: string) => IsCorrectTypes;
 }
 
 const TRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
 const MRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
 const BRow = ["Z", "X", "C", "V", "B", "N", "M"];
 
-const Keyboard = ({hangmanWord = "Hello"}: KeyboardProps) => {
-
-  const handleClick = (letter: string) => {
-    if(hangmanWord?.toLowerCase().includes(letter.toLowerCase())) {
-      return IsCorrectTypes.CORRECT;
-    }
-    return IsCorrectTypes.INCORRECT;
-  }
+const Keyboard = ({onKeyClick}: KeyboardProps) => {
 
   return (
     <Wrapper>
       <TopRow>
         {TRow.map((letter) => (
-         <LetterButton letter={letter} onClick={handleClick}/>
+         <LetterButton letter={letter} onClick={onKeyClick}/>
         ))}
       </TopRow>
       <MiddleRow>
         {MRow.map((letter) => (
-         <LetterButton letter={letter} onClick={handleClick}/>
+         <LetterButton letter={letter} onClick={onKeyClick}/>
         ))}
       </MiddleRow>
       <BottomRow>
       {BRow.map((letter) => (
-         <LetterButton letter={letter} onClick={handleClick}/>
+         <LetterButton letter={letter} onClick={onKeyClick}/>
         ))}
       </BottomRow>
     </Wrapper>

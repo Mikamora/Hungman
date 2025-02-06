@@ -32,7 +32,6 @@ const Title = styled.h1`
     letter-spacing: 30px;
     font-weight: 800;
     text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.75);
-
 `;
 
 const Info = styled.div`
