@@ -3,6 +3,7 @@ import LetterButton, { IsCorrectTypes } from "./LetterButton/LetterButton";
 
 interface KeyboardProps {
   onKeyClick: (letter: string) => IsCorrectTypes;
+  lettersGuessed: string[];
 }
 
 const TRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];

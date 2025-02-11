@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const CategoryWrapper = styled.p`
-    font-size: 20px;
+    font-size: 40px;
 `;
 
 export { CategoryWrapper };

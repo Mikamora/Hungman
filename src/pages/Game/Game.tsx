@@ -7,14 +7,20 @@ import Timer from "../../components/Timer/Timer";
 import Category from "../../components/Category/Category";
 import { GameDisplay, StickmanWrapper, AnswerWrapper, TopWrapper } from "./styles";
 import { IsCorrectTypes } from "../../components/Keyboard/LetterButton/LetterButton";
+import { useEffect, useState } from "react";
 
 const Game = () => {
   const hangmanWord = "steak";
-  const lettersGuessed = localStorage.getItem("lettersGuessed") || [];
-  const lastGuessed = localStorage.getItem("lastGuessed") || "";
+  const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
+  const [letterClicked, setLetterClicked] = useState("");
+
+  useEffect(() => {
+    setLettersGuessed([...lettersGuessed, letterClicked])
+  }, [letterClicked]);
   
   const handleClick = (letter: string) => {
-    if(hangmanWord?.toLowerCase().includes(letter.toLowerCase())) {
+    setLetterClicked(letter);
+    if(hangmanWord?.toUpperCase().includes(letter)) {
       return IsCorrectTypes.CORRECT;
     }
     return IsCorrectTypes.INCORRECT;
@@ -24,7 +30,7 @@ const Game = () => {
     <div>
       <GameDisplay>
         <TopWrapper>
-          <Timer>01:00</Timer>
+          <Timer>Timer: 00:00</Timer>
           <Category>Category: Sports</Category>
           <Settings />
         </TopWrapper>
@@ -35,10 +41,10 @@ const Game = () => {
             <Gallows />
           </StickmanWrapper >
           {/* <word /> */}
-          <Word word={hangmanWord}/>
+          <Word word={hangmanWord} lettersGuessed={lettersGuessed}/>
         </AnswerWrapper>
       </GameDisplay>
-      <Keyboard onKeyClick={handleClick}/>
+      <Keyboard lettersGuessed={lettersGuessed} onKeyClick={handleClick}/>
     </div>
   )
 };

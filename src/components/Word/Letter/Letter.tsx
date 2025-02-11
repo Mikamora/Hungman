@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { LetterContainer, LetterSpan } from "./Styles";
+import { LetterContainer, LetterSpan } from "./styles";
 
 interface LetterProps {
+    word: string;
     letter: string;
+    lettersGuessed: string[] | null;
 }
 
-const Letter = ({ letter } : LetterProps) => {
-    const [isCorrect, setIsCorrect] = useState(false);
+const Letter = ({ word, letter, lettersGuessed } : LetterProps) => {
+  {console.log(lettersGuessed)}
 
   return (
     <LetterContainer>
-      <LetterSpan $isCorrect={isCorrect} >{letter}</LetterSpan>
+      {lettersGuessed && <LetterSpan $isCorrect={lettersGuessed.includes(letter) && word.includes(letter)} >{letter}</LetterSpan>}
     </LetterContainer>
   )
 };

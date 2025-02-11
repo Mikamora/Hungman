@@ -3,13 +3,14 @@ import { WordContainer } from "./styles";
 
 interface WordInterface {
     word: string;
+    lettersGuessed: string[];
 }
 
-const Word = ({ word } : WordInterface) => {
+const Word = ({ word, lettersGuessed } : WordInterface) => {
   return (
     <WordContainer>
         {word.split("").map((char) => (
-            <Letter letter={char} />
+            <Letter word={word} letter={char} lettersGuessed={lettersGuessed}/>
         ))}
     </WordContainer>
   )

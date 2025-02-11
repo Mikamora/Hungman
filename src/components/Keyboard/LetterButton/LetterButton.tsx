@@ -14,12 +14,9 @@ interface LetterButtonProps {
 
 const LetterButton = ({ letter, onClick }: LetterButtonProps) => {
   const [isCorrect, setIsCorrect] = useState(IsCorrectTypes.UNPRESSED);
-  const lettersGuessed = localStorage.getItem("lettersGuessed") || [];
 
   const handleClick = () => { 
     setIsCorrect(onClick(letter));
-    localStorage.setItem("lettersGuessed", JSON.stringify([...lettersGuessed, letter]));
-    localStorage.setItem("lastGuessed", letter);
   }
 
   return (
