@@ -30,7 +30,7 @@ const Game = () => {
     <div>
       <GameDisplay>
         <TopWrapper>
-          <Timer>Timer: 00:00</Timer>
+          <Timer></Timer>
           <Category>Category: Sports</Category>
           <Settings />
         </TopWrapper>
