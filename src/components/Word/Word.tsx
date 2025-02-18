@@ -9,8 +9,8 @@ interface WordInterface {
 const Word = ({ word, lettersGuessed } : WordInterface) => {
   return (
     <WordContainer>
-        {word.split("").map((char) => (
-            <Letter word={word} letter={char} lettersGuessed={lettersGuessed}/>
+        {word.split("").map((char, index) => (
+            <Letter key={`${char}-${index}`} word={word} letter={char} lettersGuessed={lettersGuessed}/>
         ))}
     </WordContainer>
   )

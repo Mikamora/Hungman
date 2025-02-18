@@ -15,18 +15,18 @@ const Keyboard = ({onKeyClick}: KeyboardProps) => {
   return (
     <Wrapper>
       <TopRow>
-        {TRow.map((letter) => (
-         <LetterButton letter={letter} onClick={onKeyClick}/>
+        {TRow.map((letter, index) => (
+         <LetterButton key={`${letter}-${index}`} letter={letter} onClick={onKeyClick}/>
         ))}
       </TopRow>
       <MiddleRow>
-        {MRow.map((letter) => (
-         <LetterButton letter={letter} onClick={onKeyClick}/>
+        {MRow.map((letter, index) => (
+         <LetterButton key={`${letter}-${index}`} letter={letter} onClick={onKeyClick}/>
         ))}
       </MiddleRow>
       <BottomRow>
-      {BRow.map((letter) => (
-         <LetterButton letter={letter} onClick={onKeyClick}/>
+      {BRow.map((letter, index) => (
+         <LetterButton key={`${letter}-${index}`} letter={letter} onClick={onKeyClick}/>
         ))}
       </BottomRow>
     </Wrapper>

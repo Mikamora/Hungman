@@ -17,7 +17,6 @@ const LetterContainer = styled.div`
 const LetterSpan = styled.span<LetterSpanProps>`
     visibility: hidden;
     font-size: 80px;
-    font-family: "Inter", serif;
     font-weight: 900;
     text-transform: uppercase;
     ${({ $isCorrect }) => $isCorrect && css`

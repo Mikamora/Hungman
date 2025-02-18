@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { TimerWrapper } from "./styles"
 
-const Timer = () => {
+interface TimerProps {
+  isPlaying: boolean;
+}
+
+const Timer = ({isPlaying}: TimerProps) => {
   // Timer states
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(true);
@@ -16,10 +20,11 @@ const Timer = () => {
     return () => clearInterval(interval);
   }, [isRunning]);
 
-  // Stop timer button (for functionality's sake)
-  const stopTimer = () => {
-    setIsRunning(false);
-  };
+  useEffect(() => {
+    if(!isPlaying) {
+      setIsRunning(false);
+    };
+  }, [isPlaying]);
 
   // Format the timer into minutes:seconds
   const formatTime = (timeInSeconds : number) => {
@@ -31,7 +36,6 @@ const Timer = () => {
   return (
     <div>
       <TimerWrapper>Timer: {formatTime(time)}</TimerWrapper>
-      <button onClick={stopTimer}>Stop Timer</button>
     </div>
   );
 };

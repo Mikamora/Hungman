@@ -4,8 +4,8 @@ import Keyboard from "../../components/Keyboard/Keyboard";
 import Settings from "../../components/Settings/Settings";
 import Word from "../../components/Word/Word";
 import Timer from "../../components/Timer/Timer";
-import Category from "../../components/Category/Category";
-import { GameDisplay, StickmanWrapper, AnswerWrapper, TopWrapper } from "./styles";
+// import Category from "../../components/Category/Category";
+import { Wrapper, GameDisplay, KeyboardWrapper, StickmanWrapper, AnswerWrapper, TopWrapper } from "./styles";
 import { IsCorrectTypes } from "../../components/Keyboard/LetterButton/LetterButton";
 import { useEffect, useState } from "react";
 
@@ -13,39 +13,51 @@ const Game = () => {
   const hangmanWord = "steak";
   const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
   const [letterClicked, setLetterClicked] = useState("");
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [letterCounter, setLetterCounter] = useState(0);
 
   useEffect(() => {
-    setLettersGuessed([...lettersGuessed, letterClicked])
-  }, [letterClicked]);
+    const isWordGuessed = hangmanWord.split('').every(letter => lettersGuessed.includes(letter.toUpperCase()));
+    setIsPlaying(!isWordGuessed);
+  }, [letterClicked]); 
   
   const handleClick = (letter: string) => {
     setLetterClicked(letter);
+    setLettersGuessed([...lettersGuessed, letter]);
     if(hangmanWord?.toUpperCase().includes(letter)) {
       return IsCorrectTypes.CORRECT;
+    }
+    setLetterCounter(letterCounter + 1);
+    if (letterCounter >= 6) {
+      // Display the game over modal and stop the timer
+      setIsPlaying(false);
+      console.log("Too many guesses");
     }
     return IsCorrectTypes.INCORRECT;
   }
 
   return (
-    <div>
+    <Wrapper>
       <GameDisplay>
         <TopWrapper>
-          <Timer></Timer>
-          <Category>Category: Sports</Category>
+          <Timer isPlaying={isPlaying}></Timer>
+          {/* <Category>Category: Sports</Category> */}
           <Settings />
         </TopWrapper>
         {/* <Settings /> */}
         <AnswerWrapper>
           <StickmanWrapper >
-            <Stickman />
+            <Stickman  counter={letterCounter}/>
             <Gallows />
           </StickmanWrapper >
           {/* <word /> */}
           <Word word={hangmanWord} lettersGuessed={lettersGuessed}/>
         </AnswerWrapper>
       </GameDisplay>
-      <Keyboard lettersGuessed={lettersGuessed} onKeyClick={handleClick}/>
-    </div>
+      <KeyboardWrapper>
+        <Keyboard lettersGuessed={lettersGuessed} onKeyClick={handleClick}/>
+      </KeyboardWrapper>
+    </Wrapper>
   )
 };
 

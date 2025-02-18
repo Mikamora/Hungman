@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { LetterContainer, LetterSpan } from "./styles";
 
 interface LetterProps {
@@ -8,11 +7,10 @@ interface LetterProps {
 }
 
 const Letter = ({ word, letter, lettersGuessed } : LetterProps) => {
-  {console.log(lettersGuessed)}
 
   return (
     <LetterContainer>
-      {lettersGuessed && <LetterSpan $isCorrect={lettersGuessed.includes(letter) && word.includes(letter)} >{letter}</LetterSpan>}
+      {lettersGuessed && <LetterSpan $isCorrect={lettersGuessed.includes(letter.toUpperCase()) && word.includes(letter)} >{letter}</LetterSpan>}
     </LetterContainer>
   )
 };

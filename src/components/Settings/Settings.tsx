@@ -5,10 +5,15 @@ import { useNavigate } from "react-router-dom";
 const Settings = ({}) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleClick = () => { 
     setOpen(!open);
-  }
+  };
+
+  const darkModeToggle = () => {
+    setDarkMode(!darkMode);
+  };
 
   return (
     <Wrapper>
@@ -18,7 +23,7 @@ const Settings = ({}) => {
         onClick={handleClick}
       />
       {open && <SettingsMenu>
-        <SettingsButton>Dark Mode</SettingsButton>
+        <SettingsButton onClick={darkModeToggle}>Dark Mode</SettingsButton>
         <SettingsButton>How to Play</SettingsButton>
         <SettingsButton>Themes</SettingsButton>
         <SettingsButton onClick={() => navigate("/")}>Back to Menu</SettingsButton>
