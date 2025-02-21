@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/cat.webp';
 import { Wrapper, BananaCatImg, Title, Info, FlavorText, StartMenu, HomeButtons } from './styles';
+import Modal from '../../components/Modals/Modal';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const Home = () => {
 
   return (
     <Wrapper>
+      {/* <Modal title="Game over" size="m" className="Gameover" id="gameover" bodyContent={<HomeButtons>Body Content</HomeButtons>} footerContent={<HomeButtons>Share your hangman!</HomeButtons>}/> */}
       <BananaCatImg src={logo} alt='big muscle banana cat' />
       <Title>HUNGMAN</Title>
       <Info>

@@ -8,7 +8,6 @@ const Wrapper = styled.div`
     position: absolute;
     height: 300px;
     width: 1024px;
-    border: 1px solid black;
 `;
 
 const TopRow = styled.div`

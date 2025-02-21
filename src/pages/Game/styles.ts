@@ -5,7 +5,6 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100vh;
     flex-direction: column;
-    border: 1px solid black;
 `;
 
 const GameDisplay = styled.div`

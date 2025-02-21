@@ -10,9 +10,10 @@ export enum IsCorrectTypes {
 interface LetterButtonProps {
   letter: string;
   onClick: (letter: string) => IsCorrectTypes;
+  isDisabled?: boolean;
 };
 
-const LetterButton = ({ letter, onClick }: LetterButtonProps) => {
+const LetterButton = ({ letter, onClick, isDisabled = false }: LetterButtonProps) => {
   const [isCorrect, setIsCorrect] = useState(IsCorrectTypes.UNPRESSED);
 
   const handleClick = () => { 
@@ -23,7 +24,7 @@ const LetterButton = ({ letter, onClick }: LetterButtonProps) => {
     <Letter 
       $isCorrect={isCorrect === IsCorrectTypes.CORRECT} 
       $isWrong={isCorrect === IsCorrectTypes.INCORRECT} 
-      disabled={isCorrect !== IsCorrectTypes.UNPRESSED} 
+      disabled={isCorrect !== IsCorrectTypes.UNPRESSED || isDisabled} 
       onClick={handleClick}>
         {letter}
     </Letter>
