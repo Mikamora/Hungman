@@ -1,11 +1,19 @@
-import { Head, Body, LeftArm, RightArm, LeftLeg, RightLeg, Rope, Wrapper } from "./styles"
+import {
+  Head,
+  Body,
+  LeftArm,
+  RightArm,
+  LeftLeg,
+  RightLeg,
+  Rope,
+  Wrapper,
+} from "./styles";
 
 interface StickmanProps {
   counter: number;
 }
 
-const Stickman = ({counter}: StickmanProps) => {
-
+const Stickman = ({ counter }: StickmanProps) => {
   return (
     <Wrapper>
       {counter >= 1 && <Rope />}
@@ -16,7 +24,7 @@ const Stickman = ({counter}: StickmanProps) => {
       {counter >= 6 && <LeftLeg />}
       {counter >= 7 && <RightLeg />}
     </Wrapper>
-  )
+  );
 };
 
 export default Stickman;

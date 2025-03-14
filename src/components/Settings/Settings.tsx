@@ -6,14 +6,21 @@ import {
   SettingsButton,
   SettingsLogo,
 } from "./styles";
+import Modal from "../Modals/Modal";
 import { useNavigate } from "react-router-dom";
 import settingsLogo from "../../assets/settings.png";
 import closeLogo from "../../assets/close.png";
+import HowToPlay from "../HowToPlay/HowToPlay";
 
-const Settings = ({}) => {
+interface SettingsProps {
+  modalPortal: string;
+}
+
+const Settings = ({ modalPortal }: SettingsProps) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [howToPlay, setHowToPlay] = useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -23,8 +30,23 @@ const Settings = ({}) => {
     setDarkMode(!darkMode);
   };
 
+  const showHowToPlay = () => {
+    setHowToPlay(!howToPlay);
+  };
+
   return (
     <Wrapper>
+      {howToPlay && (
+        <Modal
+          title="Hangmench"
+          size="m"
+          className="howToPlay"
+          id="howToPlay"
+          bodyContent={<HowToPlay />}
+          onClose={() => setHowToPlay(false)}
+          portalElement={modalPortal}
+        />
+      )}
       <OpenSettings onClick={handleClick}>
         <SettingsLogo
           src={open ? closeLogo : settingsLogo}
@@ -34,7 +56,7 @@ const Settings = ({}) => {
       {open && (
         <SettingsMenu>
           <SettingsButton onClick={darkModeToggle}>Dark Mode</SettingsButton>
-          <SettingsButton>How to Play</SettingsButton>
+          <SettingsButton onClick={showHowToPlay}>How to Play</SettingsButton>
           <SettingsButton>Themes</SettingsButton>
           <SettingsButton onClick={() => navigate("/")}>
             Back to Menu

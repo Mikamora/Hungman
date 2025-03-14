@@ -1,7 +1,7 @@
 import { css, styled } from "styled-components";
 
 interface WrapperProps {
-  $size: "s" | "m";
+  $size: "s" | "m" | "l";
 }
 
 interface FooterProps {
@@ -30,9 +30,17 @@ const Wrapper = styled.div<WrapperProps>`
       width: 500px;
       height: 500px;
     `}
+
+    ${({ $size }) =>
+    $size === "l" &&
+    css`
+      width: 1000px;
+      height: 700px;
+    `}
 `;
 
 const Title = styled.p`
+  width: 300px;
   font-size: 40px;
   font-weight: 800;
   text-align: left;

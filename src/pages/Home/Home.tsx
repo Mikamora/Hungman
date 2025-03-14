@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/cat.webp";
+import HowToPlay from "../../components/HowToPlay/HowToPlay";
 import {
   Wrapper,
   BananaCatImg,
@@ -22,13 +23,24 @@ const Home = () => {
   });
 
   const [showSettings, setShowSettings] = useState(false);
+  const [showHowToPlay, setShowHowToPlay] = useState(false);
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
 
+  const toggleHowToPlay = () => {
+    setShowHowToPlay(!showHowToPlay);
+    setShowSettings(false);
+  };
+
+  const closeHowToPlay = () => {
+    setShowHowToPlay(false);
+    setShowSettings(true);
+  };
+
   return (
-    <Wrapper>
+    <Wrapper id="home-page">
       {showSettings && (
         <Modal
           title="Settings"
@@ -38,11 +50,22 @@ const Home = () => {
           bodyContent={
             <>
               <ModalButton>Dark Mode</ModalButton>
-              <ModalButton>How to Play</ModalButton>
+              <ModalButton onClick={toggleHowToPlay}>How to Play</ModalButton>
               <ModalButton>Themes</ModalButton>
             </>
           }
           onClose={() => setShowSettings(false)}
+        />
+      )}
+      {showHowToPlay && (
+        <Modal
+          title="Hangmench"
+          size="m"
+          className="howToPlay"
+          id="howToPlay"
+          bodyContent={<HowToPlay />}
+          onClose={closeHowToPlay}
+          portalElement="home-page"
         />
       )}
       <BananaCatImg src={logo} alt="big muscle banana cat" />
@@ -69,19 +92,27 @@ const Home = () => {
 };
 
 /*
-Add modal state when settings button is pressed ✅ 
-Fix settings button on main game ✅ 
-Add outsideClick to the modal component
-Add the hangman onto game over screen
-Add the correct, incorrect, and solution data to game over screen
-When you lose or win, open the win/lose modal
-Dark mode toggle
-How to play information
-Any themes
-We need to save data to localhost (only for the daily) and reset it every day - the letters that have been clicked, wrongLetter counter, time
-Setup the share button
-Set up unit tests
-Make it consistent time so that people cant change their local time
+- Add modal state when settings button is pressed ✅ 
+- Fix settings button on main game ✅ 
+- Add outsideClick to the modal component
+- game over screen ✅ 
+    - Add the hangman onto game over screen ✅ 
+    - Add the correct, incorrect, and solution data to game over screen ✅
+    - When you lose or win, open the win/lose modal ✅
+- Unlimited:
+    - Reset game ✅
+    - Refresh Keyboard state when reset game clicked
+    - How to play information
+- Daily:
+    - Make letters go away in daily, after a new word is selected
+    - We need to save data to localhost (only for the daily) and reset it every day - the letters that have been clicked, wrongLetter counter, time
+    - Make it consistent time so that people cant change their local time
+    - Make keyboard and hangman remember state
+- extra:
+    - Set up unit tests
+    - Setup the share button -> red emojis for letters incorrect, ascii hangman depending on how many guesses they did
+    - Any themes
+    - Dark mode toggle
 */
 
 export default Home;

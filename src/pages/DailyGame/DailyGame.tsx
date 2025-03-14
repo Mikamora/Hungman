@@ -5,7 +5,9 @@ import Settings from "../../components/Settings/Settings";
 import Word from "../../components/Word/Word";
 import Timer from "../../components/Timer/Timer";
 import * as randomWords from "random-words";
-// import Category from "../../components/Category/Category";
+import Modal from "../../components/Modals/Modal";
+import { ModalButton } from "../Home/styles";
+import asciiHangman from "../../helpers/ShareYourHangmanText/ShareYourHangmanText";
 import {
   Wrapper,
   GameDisplay,
@@ -13,6 +15,7 @@ import {
   StickmanWrapper,
   AnswerWrapper,
   TopWrapper,
+  StickmanDiv,
 } from "../Game/styles";
 import { IsCorrectTypes } from "../../components/Keyboard/LetterButton/LetterButton";
 import { useEffect, useState } from "react";
@@ -22,7 +25,10 @@ const DailyGame = () => {
   const words = randomWords.wordList;
   const [letterClicked, setLetterClicked] = useState("");
   const [isPlaying, setIsPlaying] = useState(true);
-  const [wrongLetters, setWrongLetters] = useState(0);
+  const [wrongLetters, setWrongLetters] = useState<string[]>([]);
+  const [correctLetters, setCorrectLetters] = useState<string[]>([]);
+  const [gameOver, setGameOver] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const dailyLettersGuessed = JSON.parse(
     window.localStorage.getItem("lettersGuessed") || '""'
   );
@@ -46,13 +52,17 @@ const DailyGame = () => {
   );
 
   useEffect(() => {
-    if (wrongLetters >= 7) return setIsPlaying(false);
     const isWordGuessed = hangmanWord
       .split("")
       .every((letter: string) =>
         dailyLettersGuessed.includes(letter.toUpperCase())
       );
+    if (wrongLetters.length >= 7) {
+      setIsPlaying(false);
+      setGameOver(true);
+    }
     setIsPlaying(!isWordGuessed);
+    console.log(isWordGuessed);
   }, [letterClicked]);
 
   const handleClick = (letter: string) => {
@@ -62,22 +72,69 @@ const DailyGame = () => {
       JSON.stringify([...dailyLettersGuessed, letter])
     );
     if (hangmanWord?.toUpperCase().includes(letter)) {
+      setCorrectLetters([...correctLetters, letter]);
       return IsCorrectTypes.CORRECT;
     }
-    setWrongLetters(wrongLetters + 1);
+    setWrongLetters([...wrongLetters, letter]);
     return IsCorrectTypes.INCORRECT;
   };
 
+  const handleModal = () => {
+    setModalOpen(!modalOpen);
+    setGameOver(false);
+    setIsPlaying(false);
+  };
+
+  const copyResults = () => {
+    if (wrongLetters.length >= 7) {
+      navigator.clipboard.writeText(
+        asciiHangman[wrongLetters.length - 1] +
+          "\nI lost the Hungman in " +
+          dailyLettersGuessed.length +
+          " guesses"
+      );
+    } else {
+      navigator.clipboard.writeText(
+        asciiHangman[wrongLetters.length - 1] +
+          "\nI won the Hungman in " +
+          dailyLettersGuessed.length +
+          " guesses"
+      );
+    }
+  };
+
   return (
-    <Wrapper>
+    <Wrapper id="daily-game">
+      {gameOver && (
+        <Modal
+          title={wrongLetters.length >= 7 ? "GAME OVER" : "YOU WON"}
+          size="m"
+          className={wrongLetters.length >= 7 ? "gameover" : "win"}
+          id="gameover"
+          bodyContent={
+            <>
+              <StickmanDiv>
+                <Stickman counter={wrongLetters.length} />
+              </StickmanDiv>
+              <p>Correct: {correctLetters}</p>
+              <p>Incorrect: {wrongLetters}</p>
+              <p>Solution: {hangmanWord.toUpperCase()}</p>
+            </>
+          }
+          footerContent={
+            <ModalButton onClick={copyResults}>Share your hangman!</ModalButton>
+          }
+          onClose={handleModal}
+        />
+      )}
       <GameDisplay>
         <TopWrapper>
           <Timer isPlaying={isPlaying}></Timer>
-          <Settings />
+          <Settings modalPortal="daily-game" />
         </TopWrapper>
         <AnswerWrapper>
           <StickmanWrapper>
-            <Stickman counter={wrongLetters} />
+            <Stickman counter={wrongLetters.length} />
             <Gallows />
           </StickmanWrapper>
           <Word word={hangmanWord} lettersGuessed={dailyLettersGuessed} />

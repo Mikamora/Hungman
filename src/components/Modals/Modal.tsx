@@ -9,11 +9,12 @@ import {
   CloseButton,
   Backdrop,
 } from "./styles";
+import Portal from "../../helpers/Portal/Portal";
 
 interface ModalInterface {
   title: string;
   subtitle?: string;
-  size: "s" | "m";
+  size: "s" | "m" | "l";
   bodyContent: ReactElement;
   footerContent?: ReactElement;
   footerButtons?: ReactElement;
@@ -21,6 +22,7 @@ interface ModalInterface {
   id?: string;
   onOutsideClick?: () => void;
   onClose?: () => void;
+  portalElement?: string;
 }
 
 const Modal = ({
@@ -33,6 +35,7 @@ const Modal = ({
   footerContent,
   footerButtons,
   onClose,
+  portalElement,
 }: ModalInterface) => {
   const [isActive, setIsActive] = useState(true);
 
@@ -49,23 +52,30 @@ const Modal = ({
   const footerContentBool = !!footerContent;
 
   return (
-    <Backdrop>
-      <Wrapper $size={size} aria-modal={isActive} className={className} id={id}>
-        <Title>{title.toUpperCase()}</Title>
-        {subtitle && <Subtitle>{subtitle}</Subtitle>}
-        <Body>{bodyContent}</Body>
-        <Footer $isPresent={footerContentBool}>
-          {footerContent}
-          <ButtonContainer>
-            {footerButtons ? (
-              footerButtons
-            ) : (
-              <CloseButton onClick={closeModal}>CLOSE</CloseButton>
-            )}
-          </ButtonContainer>
-        </Footer>
-      </Wrapper>
-    </Backdrop>
+    <Portal id={portalElement ?? "modal"}>
+      <Backdrop>
+        <Wrapper
+          $size={size}
+          aria-modal={isActive}
+          className={className}
+          id={id}
+        >
+          <Title>{title.toUpperCase()}</Title>
+          {subtitle && <Subtitle>{subtitle}</Subtitle>}
+          <Body>{bodyContent}</Body>
+          <Footer $isPresent={footerContentBool}>
+            {footerContent}
+            <ButtonContainer>
+              {footerButtons ? (
+                footerButtons
+              ) : (
+                <CloseButton onClick={closeModal}>CLOSE</CloseButton>
+              )}
+            </ButtonContainer>
+          </Footer>
+        </Wrapper>
+      </Backdrop>
+    </Portal>
   );
 };
 
