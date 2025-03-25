@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import {
   Wrapper,
   Title,
@@ -8,6 +8,7 @@ import {
   ButtonContainer,
   CloseButton,
   Backdrop,
+  FooterContentContainer,
 } from "./styles";
 import Portal from "../../helpers/Portal/Portal";
 
@@ -20,7 +21,6 @@ interface ModalInterface {
   footerButtons?: ReactElement;
   className?: string;
   id?: string;
-  onOutsideClick?: () => void;
   onClose?: () => void;
   portalElement?: string;
 }
@@ -37,12 +37,26 @@ const Modal = ({
   onClose,
   portalElement,
 }: ModalInterface) => {
+  const modalRef = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(true);
 
-  const onOutsideClick = () => {
-    // exit the modal
-    setIsActive(false);
+  const handleOutsideClick = (e: MouseEvent) => {
+    if (
+      isActive &&
+      modalRef.current &&
+      !modalRef.current.contains(e.target as Node)
+    ) {
+      setIsActive(false);
+      onClose && onClose();
+    }
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isActive]);
 
   const closeModal = () => {
     setIsActive(false);
@@ -59,12 +73,13 @@ const Modal = ({
           aria-modal={isActive}
           className={className}
           id={id}
+          ref={modalRef}
         >
           <Title>{title.toUpperCase()}</Title>
           {subtitle && <Subtitle>{subtitle}</Subtitle>}
           <Body>{bodyContent}</Body>
           <Footer $isPresent={footerContentBool}>
-            {footerContent}
+            <FooterContentContainer>{footerContent}</FooterContentContainer>
             <ButtonContainer>
               {footerButtons ? (
                 footerButtons

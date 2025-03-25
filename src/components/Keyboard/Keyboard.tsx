@@ -5,13 +5,19 @@ interface KeyboardProps {
   onKeyClick: (letter: string) => IsCorrectTypes;
   isDisabled?: boolean;
   reset?: boolean;
+  dailyWord?: string;
 }
 
-const TRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
-const MRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
-const BRow = ["Z", "X", "C", "V", "B", "N", "M"];
+const Keyboard = ({
+  onKeyClick,
+  isDisabled = false,
+  reset,
+  dailyWord,
+}: KeyboardProps) => {
+  const TRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
+  const MRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
+  const BRow = ["Z", "X", "C", "V", "B", "N", "M"];
 
-const Keyboard = ({ onKeyClick, isDisabled = false }: KeyboardProps) => {
   return (
     <Wrapper>
       <TopRow>
@@ -21,6 +27,8 @@ const Keyboard = ({ onKeyClick, isDisabled = false }: KeyboardProps) => {
             letter={letter}
             onClick={onKeyClick}
             isDisabled={isDisabled}
+            reset={reset}
+            dailyWord={dailyWord}
           />
         ))}
       </TopRow>
@@ -31,6 +39,8 @@ const Keyboard = ({ onKeyClick, isDisabled = false }: KeyboardProps) => {
             letter={letter}
             onClick={onKeyClick}
             isDisabled={isDisabled}
+            reset={reset}
+            dailyWord={dailyWord}
           />
         ))}
       </MiddleRow>
@@ -41,6 +51,8 @@ const Keyboard = ({ onKeyClick, isDisabled = false }: KeyboardProps) => {
             letter={letter}
             onClick={onKeyClick}
             isDisabled={isDisabled}
+            reset={reset}
+            dailyWord={dailyWord}
           />
         ))}
       </BottomRow>

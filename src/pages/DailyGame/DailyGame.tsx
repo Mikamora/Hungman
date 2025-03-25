@@ -16,19 +16,21 @@ import {
   AnswerWrapper,
   TopWrapper,
   StickmanDiv,
+  GameTitle,
 } from "../Game/styles";
 import { IsCorrectTypes } from "../../components/Keyboard/LetterButton/LetterButton";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const DailyGame = () => {
   // @ts-expect-error - wordList is misspelled in the types provided in the package
   const words = randomWords.wordList;
+  const navigate = useNavigate();
   const [letterClicked, setLetterClicked] = useState("");
   const [isPlaying, setIsPlaying] = useState(true);
-  const [wrongLetters, setWrongLetters] = useState<string[]>([]);
-  const [correctLetters, setCorrectLetters] = useState<string[]>([]);
   const [gameOver, setGameOver] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [showCopy, setShowCopy] = useState(false);
   const dailyLettersGuessed = JSON.parse(
     window.localStorage.getItem("lettersGuessed") || '""'
   );
@@ -47,9 +49,7 @@ const DailyGame = () => {
     return Math.floor(random * (max - min + 1)) + min;
   };
 
-  const [hangmanWord] = useState<string>(
-    words[getDailyWord(0, words.length - 1)]
-  );
+  const hangmanWord = words[getDailyWord(0, words.length - 1)];
 
   useEffect(() => {
     const isWordGuessed = hangmanWord
@@ -61,9 +61,42 @@ const DailyGame = () => {
       setIsPlaying(false);
       setGameOver(true);
     }
-    setIsPlaying(!isWordGuessed);
-    console.log(isWordGuessed);
+    if (isWordGuessed) {
+      setGameOver(true);
+      setIsPlaying(false);
+    }
   }, [letterClicked]);
+
+  const wrongLetterSorting = () => {
+    let wl: string[] = [];
+    if (dailyLettersGuessed) {
+      dailyLettersGuessed.forEach((letter: string) => {
+        if (!hangmanWord.includes(letter.toLowerCase())) {
+          wl.push(letter);
+        }
+      });
+    }
+    return wl;
+  };
+
+  const correctLetterSorting = () => {
+    let cl: string[] = [];
+    if (dailyLettersGuessed) {
+      dailyLettersGuessed.forEach((letter: string) => {
+        if (hangmanWord.includes(letter.toLowerCase())) {
+          cl.push(letter);
+        }
+      });
+    }
+    return cl;
+  };
+
+  const [wrongLetters, setWrongLetters] = useState<string[]>(
+    wrongLetterSorting()
+  );
+  const [correctLetters, setCorrectLetters] = useState<string[]>(
+    correctLetterSorting()
+  );
 
   const handleClick = (letter: string) => {
     setLetterClicked(letter);
@@ -101,6 +134,11 @@ const DailyGame = () => {
           " guesses"
       );
     }
+    setShowCopy(true);
+
+    setTimeout(() => {
+      setShowCopy(false);
+    }, 1000);
   };
 
   return (
@@ -122,7 +160,14 @@ const DailyGame = () => {
             </>
           }
           footerContent={
-            <ModalButton onClick={copyResults}>Share your hangman!</ModalButton>
+            <>
+              <ModalButton onClick={copyResults}>
+                {showCopy ? "Results copied!" : "Share your hangman!"}
+              </ModalButton>
+              <ModalButton onClick={() => navigate("/unlimited")}>
+                Play unlimited mode
+              </ModalButton>
+            </>
           }
           onClose={handleModal}
         />
@@ -130,6 +175,7 @@ const DailyGame = () => {
       <GameDisplay>
         <TopWrapper>
           <Timer isPlaying={isPlaying}></Timer>
+          <GameTitle>DAILY</GameTitle>
           <Settings modalPortal="daily-game" />
         </TopWrapper>
         <AnswerWrapper>
@@ -141,7 +187,11 @@ const DailyGame = () => {
         </AnswerWrapper>
       </GameDisplay>
       <KeyboardWrapper>
-        <Keyboard isDisabled={!isPlaying} onKeyClick={handleClick} />
+        <Keyboard
+          isDisabled={!isPlaying}
+          onKeyClick={handleClick}
+          dailyWord={hangmanWord}
+        />
       </KeyboardWrapper>
     </Wrapper>
   );

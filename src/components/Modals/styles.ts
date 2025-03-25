@@ -52,7 +52,7 @@ const Subtitle = styled.p`
 
 const Body = styled.div`
   width: 90%;
-  height: 450px;
+  height: 375px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -73,6 +73,15 @@ const Footer = styled.div<FooterProps>`
     css`
       justify-content: right;
     `}
+`;
+
+const FooterContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  min-width: 290px;
 `;
 
 // Display so that multiple buttons can be passed in and are centered with the left aligned info
@@ -119,4 +128,5 @@ export {
   CloseButton,
   ButtonContainer,
   Backdrop,
+  FooterContentContainer,
 };

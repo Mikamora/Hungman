@@ -92,25 +92,32 @@ const Home = () => {
 };
 
 /*
-- Add modal state when settings button is pressed ✅ 
-- Fix settings button on main game ✅ 
-- Add outsideClick to the modal component
-- game over screen ✅ 
-    - Add the hangman onto game over screen ✅ 
-    - Add the correct, incorrect, and solution data to game over screen ✅
-    - When you lose or win, open the win/lose modal ✅
-- Unlimited:
-    - Reset game ✅
-    - Refresh Keyboard state when reset game clicked
-    - How to play information
+- Add modal state when settings button is pressed ✅ before 3/19
+- Fix settings button on main game ✅ before 3/19
+- game over screen ✅ before 3/19
+    - Add the hangman onto game over screen ✅ before 3/19
+    - Add the correct, incorrect, and solution data to game over screen ✅ before 3/19
+    - When you lose or win, open the win/lose modal ✅ before 3/19
+- Unlimited: ✅ 
+    - Reset game ✅ <-- before 3/19
+    - Refresh Keyboard state when reset game clicked ✅ <-- before 3/19
+    - Play again button on the modal ✅ <- before 3/19
+    - How to play information ✅ before 3/19
 - Daily:
     - Make letters go away in daily, after a new word is selected
-    - We need to save data to localhost (only for the daily) and reset it every day - the letters that have been clicked, wrongLetter counter, time
+    - We need to save data to localhost (only for the daily) and reset it every day
+      - Correct/Incorrect letter assignments on page reload ✅ 3/24
+      - Wrong letter counter -> update hangman ✅ 3/24
+      - Save time passed -> toString() on save and parseInt() on load
     - Make it consistent time so that people cant change their local time
-    - Make keyboard and hangman remember state
+    - Make hangman remember state
+    - Put title on the top of daily "Daily" and the top of unlimited "Unlimited" ✅ 3/24
+      - Transition to grid at smaller screen sizes?
+    - Add "play unlimited" button to game over screen ✅ 3/19
+- Add outsideClick to the modal component ✅ 3/24
 - extra:
     - Set up unit tests
-    - Setup the share button -> red emojis for letters incorrect, ascii hangman depending on how many guesses they did
+    - Setup the share button -> red emojis for letters incorrect, ascii hangman depending on how many guesses they did ✅ before 3/19
     - Any themes
     - Dark mode toggle
 */

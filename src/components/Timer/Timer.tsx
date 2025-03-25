@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { TimerWrapper } from "./styles"
+import { TimerWrapper } from "./styles";
 
 interface TimerProps {
   isPlaying: boolean;
 }
 
-const Timer = ({isPlaying}: TimerProps) => {
+const Timer = ({ isPlaying }: TimerProps) => {
   // Timer states
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(true);
@@ -21,17 +21,22 @@ const Timer = ({isPlaying}: TimerProps) => {
   }, [isRunning]);
 
   useEffect(() => {
-    if(!isPlaying) {
+    if (!isPlaying) {
       setIsRunning(false);
-    };
+    } else {
+      setTime(0);
+      setIsRunning(true);
+    }
   }, [isPlaying]);
 
   // Format the timer into minutes:seconds
-  const formatTime = (timeInSeconds : number) => {
+  const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  }
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
   return (
     <div>

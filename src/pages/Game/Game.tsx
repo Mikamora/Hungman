@@ -17,6 +17,7 @@ import {
   StickmanDiv,
   PlayAgainButton,
   PlaySettingsContainer,
+  GameTitle,
 } from "./styles";
 import { IsCorrectTypes } from "../../components/Keyboard/LetterButton/LetterButton";
 import { useEffect, useState } from "react";
@@ -34,6 +35,8 @@ const Game = () => {
   const [gameOver, setGameOver] = useState(false);
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
   const [wrongLetters, setWrongLetters] = useState<string[]>([]);
+  const [resetKeyboard, setResetKeyboard] = useState<boolean>(false);
+  const [showCopy, setShowCopy] = useState(false);
 
   useEffect(() => {
     const isWordGuessed = hangmanWord
@@ -50,6 +53,7 @@ const Game = () => {
   }, [letterClicked]);
 
   const handleClick = (letter: string) => {
+    resetKeyboard && setResetKeyboard(false);
     setLetterClicked(letter);
     setLettersGuessed([...lettersGuessed, letter]);
     if (hangmanWord?.toUpperCase().includes(letter)) {
@@ -66,6 +70,11 @@ const Game = () => {
     setIsPlaying(false);
   };
 
+  const openModal = () => {
+    setGameOver(true);
+    setModalOpen(!modalOpen);
+  };
+
   const handlePlayAgain = () => {
     //TODO: refactor this to use useReducer
     setGameOver(false);
@@ -75,6 +84,8 @@ const Game = () => {
     setWrongLetters([]);
     setHangmanWord(generate(1)[0]);
     setLetterClicked("");
+    setResetKeyboard(true);
+    setShowCopy(false);
   };
 
   const copyResults = () => {
@@ -93,6 +104,13 @@ const Game = () => {
           " guesses"
       );
     }
+    // TODO: make the text of the button change to "copied!" or have a small alert appear near it that says "copied!" and fades away after 3 seconds
+    //alert("Hungman copied to clipboard!");
+    setShowCopy(true);
+
+    setTimeout(() => {
+      setShowCopy(false);
+    }, 1000);
   };
 
   return (
@@ -114,7 +132,12 @@ const Game = () => {
             </>
           }
           footerContent={
-            <ModalButton onClick={copyResults}>Share your hangman!</ModalButton>
+            <>
+              <ModalButton onClick={copyResults}>
+                {showCopy ? "Results copied!" : "Share your hangman!"}
+              </ModalButton>
+              <ModalButton onClick={handlePlayAgain}>Play Again?</ModalButton>
+            </>
           }
           onClose={handleModal}
         />
@@ -122,16 +145,21 @@ const Game = () => {
       <GameDisplay>
         <TopWrapper>
           <Timer isPlaying={isPlaying}></Timer>
+          <GameTitle>UNLIMITED</GameTitle>
           <PlaySettingsContainer $playAgainIsVisible={!isPlaying}>
             {!isPlaying && (
-              <PlayAgainButton onClick={handlePlayAgain}>
-                Play Again?
-              </PlayAgainButton>
+              <>
+                <PlayAgainButton onClick={openModal}>
+                  View Results
+                </PlayAgainButton>
+                <PlayAgainButton onClick={handlePlayAgain}>
+                  Play Again?
+                </PlayAgainButton>
+              </>
             )}
             <Settings modalPortal="unlimited-game" />
           </PlaySettingsContainer>
         </TopWrapper>
-        {/* <ModalButton onClick={handleModal}>Modal</ModalButton> */}
         <AnswerWrapper>
           <StickmanWrapper>
             <Stickman counter={wrongLetters.length} />
@@ -141,7 +169,11 @@ const Game = () => {
         </AnswerWrapper>
       </GameDisplay>
       <KeyboardWrapper>
-        <Keyboard isDisabled={!isPlaying} onKeyClick={handleClick} />
+        <Keyboard
+          isDisabled={!isPlaying}
+          onKeyClick={handleClick}
+          reset={resetKeyboard}
+        />
       </KeyboardWrapper>
     </Wrapper>
   );

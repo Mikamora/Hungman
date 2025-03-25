@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const Wrapper = styled.div`
   display: flex;
@@ -52,6 +52,14 @@ const TopWrapper = styled.div`
   align-items: center;
 `;
 
+const GameTitle = styled.p`
+  font-size: 40px;
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  transform: translate(-50%, 0);
+`;
+
 const StickmanDiv = styled.div`
   position: absolute;
   top: -75px;
@@ -61,6 +69,7 @@ const StickmanDiv = styled.div`
 const PlayAgainButton = styled.button`
   display: flex;
   justify-content: center;
+  align-items: center;
   font-family: "Inter", serif;
   height: 60px;
   width: 200px;
@@ -70,11 +79,7 @@ const PlayAgainButton = styled.button`
   font-size: 22px;
   border-radius: 15px;
   border: 0;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  padding-left: 40px;
-  margin-right: 10px;
+  margin-right: 15px;
   &:hover {
     cursor: pointer;
     background-color: grey;
@@ -105,4 +110,5 @@ export {
   StickmanDiv,
   PlayAgainButton,
   PlaySettingsContainer,
+  GameTitle,
 };

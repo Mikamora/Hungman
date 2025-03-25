@@ -87,9 +87,9 @@ const ModalButton = styled.button`
   border-radius: 10px;
   border: 0;
   display: flex;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
-  padding-left: 20px;
+  padding-left: 10px;
   &:hover {
     cursor: pointer;
     background-color: grey;
