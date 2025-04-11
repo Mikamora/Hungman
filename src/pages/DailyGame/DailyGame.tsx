@@ -31,9 +31,7 @@ const DailyGame = () => {
   const [gameOver, setGameOver] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [showCopy, setShowCopy] = useState(false);
-  const dailyLettersGuessed = JSON.parse(
-    window.localStorage.getItem("lettersGuessed") || '""'
-  );
+  const [isLoading, setIsLoading] = useState(true);
 
   const getDailyWord = (min: number, max: number) => {
     const now = new Date();
@@ -49,8 +47,54 @@ const DailyGame = () => {
     return Math.floor(random * (max - min + 1)) + min;
   };
 
-  const hangmanWord = words[getDailyWord(0, words.length - 1)];
+  const [hangmanWord, setHangmanWord] = useState(
+    words[getDailyWord(0, words.length - 1)]
+  );
 
+  let dailyLettersGuessed = JSON.parse(
+    window.localStorage.getItem("lettersGuessed") || '""'
+  );
+  let dailyWordIndexLS = JSON.parse(
+    window.localStorage.getItem("dailyWordIndex") || '""'
+  );
+  let dailyTimer = JSON.parse(window.localStorage.getItem("dailyTimer") || "0");
+
+  console.log(dailyLettersGuessed);
+
+  // Reset all states and local storage
+  useEffect(() => {
+    const dailyWordIndex = getDailyWord(0, words.length - 1);
+    setHangmanWord(words[dailyWordIndex]);
+
+    if (dailyWordIndex !== dailyWordIndexLS) {
+      // Reset daily letters guessed
+      dailyLettersGuessed = [];
+      window.localStorage.setItem("lettersGuessed", JSON.stringify([]));
+
+      // Reset the dailyWordIndex => resets the daily word to a new word
+      window.localStorage.setItem(
+        "dailyWordIndex",
+        JSON.stringify(dailyWordIndex)
+      );
+
+      // Reset the timer
+      dailyTimer = 0;
+      window.localStorage.setItem("dailyTimer", JSON.stringify(0));
+
+      // Reset all state variables
+      setWrongLetters([]);
+      setCorrectLetters([]);
+      setGameOver(false);
+      setIsPlaying(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Checks if the clicked letter is in the daily word
   useEffect(() => {
     const isWordGuessed = hangmanWord
       .split("")
@@ -65,38 +109,7 @@ const DailyGame = () => {
       setGameOver(true);
       setIsPlaying(false);
     }
-  }, [letterClicked]);
-
-  const wrongLetterSorting = () => {
-    let wl: string[] = [];
-    if (dailyLettersGuessed) {
-      dailyLettersGuessed.forEach((letter: string) => {
-        if (!hangmanWord.includes(letter.toLowerCase())) {
-          wl.push(letter);
-        }
-      });
-    }
-    return wl;
-  };
-
-  const correctLetterSorting = () => {
-    let cl: string[] = [];
-    if (dailyLettersGuessed) {
-      dailyLettersGuessed.forEach((letter: string) => {
-        if (hangmanWord.includes(letter.toLowerCase())) {
-          cl.push(letter);
-        }
-      });
-    }
-    return cl;
-  };
-
-  const [wrongLetters, setWrongLetters] = useState<string[]>(
-    wrongLetterSorting()
-  );
-  const [correctLetters, setCorrectLetters] = useState<string[]>(
-    correctLetterSorting()
-  );
+  }, [letterClicked, hangmanWord]);
 
   const handleClick = (letter: string) => {
     setLetterClicked(letter);
@@ -111,6 +124,40 @@ const DailyGame = () => {
     setWrongLetters([...wrongLetters, letter]);
     return IsCorrectTypes.INCORRECT;
   };
+
+  // Maybe convert these sorting functions into one function using switch cases
+  const wrongLetterSorting = () => {
+    let wl: string[] = [];
+    console.log(dailyLettersGuessed);
+    if (dailyLettersGuessed) {
+      dailyLettersGuessed.forEach((letter: string) => {
+        if (!hangmanWord.toLowerCase().includes(letter.toLowerCase())) {
+          wl.push(letter.toLowerCase());
+        }
+      });
+      console.log("wl" + wl);
+    }
+    return wl;
+  };
+
+  const correctLetterSorting = () => {
+    let cl: string[] = [];
+    if (dailyLettersGuessed) {
+      dailyLettersGuessed.forEach((letter: string) => {
+        if (hangmanWord.toLowerCase().includes(letter.toLowerCase())) {
+          cl.push(letter.toLowerCase());
+        }
+      });
+    }
+    return cl;
+  };
+
+  const [wrongLetters, setWrongLetters] = useState<string[]>(
+    wrongLetterSorting()
+  );
+  const [correctLetters, setCorrectLetters] = useState<string[]>(
+    correctLetterSorting()
+  );
 
   const handleModal = () => {
     setModalOpen(!modalOpen);
@@ -141,7 +188,10 @@ const DailyGame = () => {
     }, 1000);
   };
 
-  return (
+  // Make a better loading state! Maybe css animation???
+  return isLoading ? (
+    <>Loading...</>
+  ) : (
     <Wrapper id="daily-game">
       {gameOver && (
         <Modal
@@ -174,7 +224,7 @@ const DailyGame = () => {
       )}
       <GameDisplay>
         <TopWrapper>
-          <Timer isPlaying={isPlaying}></Timer>
+          <Timer isPlaying={isPlaying} isDaily={true}></Timer>
           <GameTitle>DAILY</GameTitle>
           <Settings modalPortal="daily-game" />
         </TopWrapper>

@@ -104,22 +104,26 @@ const Home = () => {
     - Play again button on the modal ✅ <- before 3/19
     - How to play information ✅ before 3/19
 - Daily:
-    - Make letters go away in daily, after a new word is selected
-    - We need to save data to localhost (only for the daily) and reset it every day
+    - Make letters go away in daily, after a new word is selected ✅ 3/31
+    - We need to save data to localhost (only for the daily) and reset it every day ✅ 3/31
       - Correct/Incorrect letter assignments on page reload ✅ 3/24
       - Wrong letter counter -> update hangman ✅ 3/24
-      - Save time passed -> toString() on save and parseInt() on load
-    - Make it consistent time so that people cant change their local time
-    - Make hangman remember state
+      - Save time passed -> toString() on save and parseInt() on load ✅ 4/10
+    - Make hangman remember state ✅ 3/24
     - Put title on the top of daily "Daily" and the top of unlimited "Unlimited" ✅ 3/24
-      - Transition to grid at smaller screen sizes?
     - Add "play unlimited" button to game over screen ✅ 3/19
 - Add outsideClick to the modal component ✅ 3/24
+- Add loading state for brief flicker ✅ 4/10
+    - Add more styling to the loading state cover
+- Deploy this on github pages
 - extra:
-    - Set up unit tests
+    - Set up unit tests - components - integration tests - routing tests
     - Setup the share button -> red emojis for letters incorrect, ascii hangman depending on how many guesses they did ✅ before 3/19
     - Any themes
-    - Dark mode toggle
+    - Dark mode toggle - styled components themes
+    - Transition to grid at smaller screen sizes - media queries
+    - Add win streak/ longest streak
+    - Make it consistent time so that people cant change their local time (DONT DO THIS TIME BUT MAYBE IN THE FUTURE)
 */
 
 export default Home;

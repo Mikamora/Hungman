@@ -3,18 +3,26 @@ import { TimerWrapper } from "./styles";
 
 interface TimerProps {
   isPlaying: boolean;
+  isDaily?: boolean;
 }
 
-const Timer = ({ isPlaying }: TimerProps) => {
+const Timer = ({ isPlaying, isDaily }: TimerProps) => {
   // Timer states
+  // Potentially add prop for whether it's the daily or unlimited -> saves to localhost if it's the daily, doesn't matter for unlimited ( see LetterButton for example )
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(true);
+  const [dailyTime, setDailyTime] = useState(
+    JSON.parse(window.localStorage.getItem("dailyTimer") || "0")
+  );
 
   // Use effect to start the timer on page load & update it every second
   useEffect(() => {
     if (!isRunning) return;
+
     const interval = setInterval(() => {
-      setTime((prevTime) => prevTime + 1);
+      isDaily
+        ? setDailyTime((dailyTime: number) => dailyTime + 1)
+        : setTime((prevTime: number) => prevTime + 1);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -29,6 +37,10 @@ const Timer = ({ isPlaying }: TimerProps) => {
     }
   }, [isPlaying]);
 
+  useEffect(() => {
+    isDaily && window.localStorage.setItem("dailyTimer", dailyTime);
+  }, [dailyTime]);
+
   // Format the timer into minutes:seconds
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -40,7 +52,9 @@ const Timer = ({ isPlaying }: TimerProps) => {
 
   return (
     <div>
-      <TimerWrapper>Timer: {formatTime(time)}</TimerWrapper>
+      <TimerWrapper>
+        Timer: {formatTime(isDaily ? dailyTime : time)}
+      </TimerWrapper>
     </div>
   );
 };
