@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { TimerWrapper } from "./styles";
+import { formatTime } from "../../helpers/Time/FormatTime";
 
 interface TimerProps {
   isPlaying: boolean;
   isDaily?: boolean;
+  reportTime?: (timer: number) => void;
 }
 
-const Timer = ({ isPlaying, isDaily }: TimerProps) => {
+const Timer = ({ isPlaying, isDaily, reportTime }: TimerProps) => {
   // Timer states
-  // Potentially add prop for whether it's the daily or unlimited -> saves to localhost if it's the daily, doesn't matter for unlimited ( see LetterButton for example )
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(true);
   const [dailyTime, setDailyTime] = useState(
@@ -22,7 +23,10 @@ const Timer = ({ isPlaying, isDaily }: TimerProps) => {
     const interval = setInterval(() => {
       isDaily
         ? setDailyTime((dailyTime: number) => dailyTime + 1)
-        : setTime((prevTime: number) => prevTime + 1);
+        : setTime((prevTime: number) => {
+            reportTime && reportTime(prevTime + 1);
+            return prevTime + 1;
+          });
     }, 1000);
 
     return () => clearInterval(interval);
@@ -40,15 +44,6 @@ const Timer = ({ isPlaying, isDaily }: TimerProps) => {
   useEffect(() => {
     isDaily && window.localStorage.setItem("dailyTimer", dailyTime);
   }, [dailyTime]);
-
-  // Format the timer into minutes:seconds
-  const formatTime = (timeInSeconds: number) => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
-  };
 
   return (
     <div>

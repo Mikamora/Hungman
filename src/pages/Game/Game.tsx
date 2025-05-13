@@ -4,6 +4,7 @@ import Keyboard from "../../components/Keyboard/Keyboard";
 import Settings from "../../components/Settings/Settings";
 import Word from "../../components/Word/Word";
 import Timer from "../../components/Timer/Timer";
+import { formatTimeWords } from "../../helpers/Time/FormatTime";
 import Modal from "../../components/Modals/Modal";
 import asciiHangman from "../../helpers/ShareYourHangmanText/ShareYourHangmanText";
 import * as randomWords from "random-words";
@@ -37,6 +38,7 @@ const Game = () => {
   const [wrongLetters, setWrongLetters] = useState<string[]>([]);
   const [resetKeyboard, setResetKeyboard] = useState<boolean>(false);
   const [showCopy, setShowCopy] = useState(false);
+  const [gameTime, setGameTime] = useState(0);
 
   useEffect(() => {
     const isWordGuessed = hangmanWord
@@ -86,31 +88,41 @@ const Game = () => {
     setLetterClicked("");
     setResetKeyboard(true);
     setShowCopy(false);
+    setGameTime(0);
+  };
+
+  const getTime = (time: number) => {
+    setGameTime(time);
   };
 
   const copyResults = () => {
     if (wrongLetters.length >= 7) {
       navigator.clipboard.writeText(
-        asciiHangman[wrongLetters.length - 1] +
-          "\nI lost the Hungman in " +
-          lettersGuessed.length +
-          " guesses"
+        `${asciiHangman[wrongLetters.length]} \nI lost the Hungman with ${
+          lettersGuessed.length
+        } guesses in ${formatTimeWords(
+          gameTime
+        )} \nSolution: ${hangmanWord.toUpperCase()}`
       );
     } else {
       navigator.clipboard.writeText(
-        asciiHangman[wrongLetters.length - 1] +
-          "\nI won the Hungman in " +
-          lettersGuessed.length +
-          " guesses"
+        `${asciiHangman[wrongLetters.length]} \nI won the Hungman with ${
+          lettersGuessed.length
+        } guesses in ${formatTimeWords(
+          gameTime
+        )} \nSolution: ${hangmanWord.toUpperCase()}`
       );
     }
-    // TODO: make the text of the button change to "copied!" or have a small alert appear near it that says "copied!" and fades away after 3 seconds
-    //alert("Hungman copied to clipboard!");
+
     setShowCopy(true);
 
     setTimeout(() => {
       setShowCopy(false);
     }, 1000);
+  };
+
+  const toUpper = (letter: string) => {
+    return letter.toUpperCase();
   };
 
   return (
@@ -126,8 +138,8 @@ const Game = () => {
               <StickmanDiv>
                 <Stickman counter={wrongLetters.length} />
               </StickmanDiv>
-              <p>Correct: {correctLetters}</p>
-              <p>Incorrect: {wrongLetters}</p>
+              <p>Correct: {correctLetters.map(toUpper)}</p>
+              <p>Incorrect: {wrongLetters.map(toUpper)}</p>
               <p>Solution: {hangmanWord.toUpperCase()}</p>
             </>
           }
@@ -144,7 +156,7 @@ const Game = () => {
       )}
       <GameDisplay>
         <TopWrapper>
-          <Timer isPlaying={isPlaying}></Timer>
+          <Timer isPlaying={isPlaying} reportTime={getTime}></Timer>
           <GameTitle>UNLIMITED</GameTitle>
           <PlaySettingsContainer $playAgainIsVisible={!isPlaying}>
             {!isPlaying && (

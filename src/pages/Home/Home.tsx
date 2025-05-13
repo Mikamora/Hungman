@@ -94,6 +94,7 @@ const Home = () => {
 /*
 - Add modal state when settings button is pressed ✅ before 3/19
 - Fix settings button on main game ✅ before 3/19
+- Keep all user-side letters in uppercase (toUpper function) ✅ 4/17
 - game over screen ✅ before 3/19
     - Add the hangman onto game over screen ✅ before 3/19
     - Add the correct, incorrect, and solution data to game over screen ✅ before 3/19
@@ -103,6 +104,7 @@ const Home = () => {
     - Refresh Keyboard state when reset game clicked ✅ <-- before 3/19
     - Play again button on the modal ✅ <- before 3/19
     - How to play information ✅ before 3/19
+    - Add solution to results on Unlimited game ✅ 5/12
 - Daily:
     - Make letters go away in daily, after a new word is selected ✅ 3/31
     - We need to save data to localhost (only for the daily) and reset it every day ✅ 3/31
@@ -112,6 +114,8 @@ const Home = () => {
     - Make hangman remember state ✅ 3/24
     - Put title on the top of daily "Daily" and the top of unlimited "Unlimited" ✅ 3/24
     - Add "play unlimited" button to game over screen ✅ 3/19
+    - Added "View Results" button at the top after game is over ✅ 4/17
+    - Added "Play Unlimited" button at the top after game is over ✅ 4/17
 - Add outsideClick to the modal component ✅ 3/24
 - Add loading state for brief flicker ✅ 4/10
     - Add more styling to the loading state cover
@@ -119,10 +123,11 @@ const Home = () => {
 - extra:
     - Set up unit tests - components - integration tests - routing tests
     - Setup the share button -> red emojis for letters incorrect, ascii hangman depending on how many guesses they did ✅ before 3/19
+      - Add timer value to the modal and share hangman ascii somewhere -- REQUIRES refactorization of the timer component -> store time state in DailyGame/Game and pass to Timer component as prop ✅ 5/12
     - Any themes
     - Dark mode toggle - styled components themes
     - Transition to grid at smaller screen sizes - media queries
-    - Add win streak/ longest streak
+    - Add win streak/longest streak
     - Make it consistent time so that people cant change their local time (DONT DO THIS TIME BUT MAYBE IN THE FUTURE)
 */
 

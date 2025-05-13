@@ -4,6 +4,7 @@ import Keyboard from "../../components/Keyboard/Keyboard";
 import Settings from "../../components/Settings/Settings";
 import Word from "../../components/Word/Word";
 import Timer from "../../components/Timer/Timer";
+import { formatTimeWords } from "../../helpers/Time/FormatTime";
 import * as randomWords from "random-words";
 import Modal from "../../components/Modals/Modal";
 import { ModalButton } from "../Home/styles";
@@ -17,6 +18,8 @@ import {
   TopWrapper,
   StickmanDiv,
   GameTitle,
+  PlaySettingsContainer,
+  PlayAgainButton,
 } from "../Game/styles";
 import { IsCorrectTypes } from "../../components/Keyboard/LetterButton/LetterButton";
 import { useEffect, useState } from "react";
@@ -165,20 +168,26 @@ const DailyGame = () => {
     setIsPlaying(false);
   };
 
+  const openModal = () => {
+    setGameOver(true);
+    setModalOpen(!modalOpen);
+  };
+
   const copyResults = () => {
+    let dailyTimer = JSON.parse(
+      window.localStorage.getItem("dailyTimer") || "0"
+    );
     if (wrongLetters.length >= 7) {
       navigator.clipboard.writeText(
-        asciiHangman[wrongLetters.length - 1] +
-          "\nI lost the Hungman in " +
-          dailyLettersGuessed.length +
-          " guesses"
+        `${asciiHangman[wrongLetters.length]} \nI lost the Hungman with ${
+          dailyLettersGuessed.length
+        } guesses in ${formatTimeWords(dailyTimer)}`
       );
     } else {
       navigator.clipboard.writeText(
-        asciiHangman[wrongLetters.length - 1] +
-          "\nI won the Hungman in " +
-          dailyLettersGuessed.length +
-          " guesses"
+        `${asciiHangman[wrongLetters.length]} \nI won the Hungman with ${
+          dailyLettersGuessed.length
+        } guesses in ${formatTimeWords(dailyTimer)}`
       );
     }
     setShowCopy(true);
@@ -186,6 +195,10 @@ const DailyGame = () => {
     setTimeout(() => {
       setShowCopy(false);
     }, 1000);
+  };
+
+  const toUpper = (letter: string) => {
+    return letter.toUpperCase();
   };
 
   // Make a better loading state! Maybe css animation???
@@ -204,8 +217,8 @@ const DailyGame = () => {
               <StickmanDiv>
                 <Stickman counter={wrongLetters.length} />
               </StickmanDiv>
-              <p>Correct: {correctLetters}</p>
-              <p>Incorrect: {wrongLetters}</p>
+              <p>Correct: {correctLetters.map(toUpper)}</p>
+              <p>Incorrect: {wrongLetters.map(toUpper)}</p>
               <p>Solution: {hangmanWord.toUpperCase()}</p>
             </>
           }
@@ -226,7 +239,19 @@ const DailyGame = () => {
         <TopWrapper>
           <Timer isPlaying={isPlaying} isDaily={true}></Timer>
           <GameTitle>DAILY</GameTitle>
-          <Settings modalPortal="daily-game" />
+          <PlaySettingsContainer $playAgainIsVisible={!isPlaying}>
+            {!isPlaying && (
+              <>
+                <PlayAgainButton onClick={openModal}>
+                  View Results
+                </PlayAgainButton>
+                <PlayAgainButton onClick={() => navigate("/unlimited")}>
+                  Play Unlimited
+                </PlayAgainButton>
+              </>
+            )}
+            <Settings modalPortal="daily-game" />
+          </PlaySettingsContainer>
         </TopWrapper>
         <AnswerWrapper>
           <StickmanWrapper>
